@@ -22,7 +22,9 @@ import com.hrins.hrinsx.ui.theme.HrinsXTheme
 import com.hrins.hrinsx.ui.uiValidation.CircularProgressBar
 import com.hrins.hrinsx.ui.uiValidation.ViewResponse
 import com.hrins.hrinsx.ui.uiValidation.ViewStatusValidation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<LaunchesViewModel>()
@@ -85,35 +87,36 @@ class MainActivity : ComponentActivity() {
                                     fontSize = 20.sp,
                                     color = Color.White
                                 )
-                                ViewStatusValidation(viewResponse,
-                                    resources.getString(R.string.LAUNCHES),
 
-                                    Box(modifier = Modifier.fillMaxSize()) {
-
-
-                                        LazyColumn {
-                                            itemsIndexed(items = launches) { index, item: Launch ->
-                                                viewModel.onChangeScrollPosition(index)
-                                                if ((index + 1) >= (page * pageSize) && viewResponse != ViewResponse.Loading) {
-                                                    viewModel.nextPage()
-                                                }
-
-                                                LaunchRow(launch = item, onClick = {})
-                                            }
-                                            item {
-                                                val isLoading: Boolean =
-                                                    viewResponse == ViewResponse.NextPageLoading
-                                                CircularProgressBar(isDisplayed = isLoading)
-
-                                            }
-                                        }
-
-                                    },
-                                    onReload = {
-                                        viewModel.getFirst()
-                                    })
 
                             }
+                            ViewStatusValidation(viewResponse,
+                                resources.getString(R.string.LAUNCHES),
+
+                                Box(modifier = Modifier.fillMaxSize()) {
+
+
+                                    LazyColumn {
+                                        itemsIndexed(items = launches) { index, item: Launch ->
+                                            viewModel.onChangeScrollPosition(index)
+                                            if ((index + 1) >= (page * pageSize) && viewResponse != ViewResponse.Loading) {
+                                                viewModel.nextPage()
+                                            }
+
+                                            LaunchRow(launch = item, onClick = {})
+                                        }
+                                        item {
+                                            val isLoading: Boolean =
+                                                viewResponse == ViewResponse.NextPageLoading
+                                            CircularProgressBar(isDisplayed = isLoading)
+
+                                        }
+                                    }
+
+                                },
+                                onReload = {
+                                    viewModel.getFirst()
+                                })
                         }
                     }
                 }

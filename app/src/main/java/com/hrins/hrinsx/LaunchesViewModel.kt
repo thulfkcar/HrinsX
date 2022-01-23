@@ -16,7 +16,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LaunchesViewModel @Inject constructor(private val launchesRepo: LaunchesRepo ,val networkMapper: NetworkMapper) :  ViewModel() {
+class LaunchesViewModel @Inject
+constructor(
+    private val launchesRepo: LaunchesRepo,
+    val networkMapper: NetworkMapper
+) : ViewModel() {
 
     val viewResponse: MutableState<ViewResponse> = mutableStateOf(ViewResponse.Non)
 

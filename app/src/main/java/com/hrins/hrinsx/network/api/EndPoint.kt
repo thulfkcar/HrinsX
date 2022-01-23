@@ -4,7 +4,7 @@ class EndPoint {
 
     companion object {
         //Base URL jndsdfsd
-        const val BASE_URL = "https://alkafeelblog-api.turathalanbiaa.com/api/"
+        const val BASE_URL = "https://api.spacexdata.com/v3/"
 
         //API KEY - Go to geo currency converter website, obtain an                                       API key and paste it between " "
 
