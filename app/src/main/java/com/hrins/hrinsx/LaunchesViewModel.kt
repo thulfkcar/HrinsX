@@ -36,8 +36,11 @@ constructor(
             if (page.value > 1) {
                 viewModelScope.launch {
                     launchesRepo.launches(
-                        page = page.value,
-                        pageSize = pageSize,
+                        page.value,
+                        "flight_number",
+                        "desc",
+                        pageSize,
+
                         object : OnCompleteListener<MultiResponseStructure<LaunchDto>> {
                             override fun onComplete(t: MultiResponseStructure<LaunchDto>) {
                                 if (t.data != null) {
