@@ -6,4 +6,8 @@
     <string name="days">Days:</string>
     <string name="company">COMPANY</string>
     <string name="LAUNCHES">LAUNCHES</string>
+    <string name="nodata">"No Data Found "</string>
+    <string name="networkError">network error</string>
+    <string name="loading">Loadnig</string>
+    <string name="noConnection">No Connection With Server</string>
 </resources>

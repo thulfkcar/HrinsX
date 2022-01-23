@@ -85,6 +85,9 @@ dependencies {
         transitive = true
     }
 
+    implementation("com.android.volley:volley:1.2.1")
+
+
     //coroutines
     def coroutines_version = "1.5.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -102,4 +105,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-fragment:$hilt_jetpack_version")
 //    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_jetpack_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
+
 }
