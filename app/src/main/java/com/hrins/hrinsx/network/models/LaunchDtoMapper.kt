@@ -22,7 +22,8 @@ class LaunchDtoMapper : DomainMapper<LaunchDto, Launch> {
             ),
             days,
             model.linksDto.missionPatch,
-            model.launchSuccess
+            model.launchSuccess,
+            model.linksDto
         )
     }
 

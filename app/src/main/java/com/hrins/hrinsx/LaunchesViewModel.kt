@@ -21,11 +21,36 @@ constructor(
     val networkMapper: NetworkMapper
 ) : ViewModel() {
 
+     val selectedSorting: MutableState<String?> = mutableStateOf(null)
+     val selectedLandingStatus: MutableState<Boolean?> = mutableStateOf(null)
+     val selectedOrder: MutableState<String?> = mutableStateOf(null)
+     val selectedYear: MutableState<Int?> = mutableStateOf(null)
+    val applyFiler: MutableState<Boolean> = mutableStateOf(false)
+    val orders = listOf("desc", "asc")
+    val sorts = listOf("flight_number", "mission_name", "launch_year", "rocket")
+    val successfulLandings = listOf(true, false)
+    val openDialog: MutableState<Boolean> = mutableStateOf(false)
+    val selectedLaunch: MutableState<Launch?> = mutableStateOf(null)
     val viewResponse: MutableState<ViewResponse> = mutableStateOf(ViewResponse.Non)
+    val years = listOf(2018, 2019, 2020, 2021)
+
+    fun setFilterToBeApplied(b: Boolean) {
+        applyFiler.value = b
+        if (!applyFiler.value){
+            setFilterLandingStatus(null)
+            setFilteredOrder(null)
+            setFilteredYear(null)
+            setFilterSorting(null)
+        }
+    }
 
     fun onChangeScrollPosition(position: Int) {
         scrollPosition = position
 
+    }
+
+    fun setSelectedLaunch(launch: Launch) {
+        selectedLaunch.value = launch
     }
 
     fun nextPage() {
@@ -36,9 +61,9 @@ constructor(
                 viewModelScope.launch {
                     launchesRepo.launches(
                         page.value,
-                        "flight_number",
-                        "desc",
-                        pageSize,
+                        selectedSorting.value,
+                        selectedOrder.value,
+                        pageSize, selectedLandingStatus.value, selectedYear.value,
 
                         object : OnCompleteListener<List<LaunchDto>> {
                             override fun onComplete(t: List<LaunchDto>) {
@@ -51,7 +76,7 @@ constructor(
                                     )
                                     viewResponse.value = ViewResponse.Fetched
                                 }
-                                viewResponse.value=ViewResponse.NoData
+                                viewResponse.value = ViewResponse.NoData
                             }
 
                             override fun onError(error: String?) {
@@ -63,35 +88,36 @@ constructor(
             }
         }
     }
+
     private fun resetSearchState() {
         page.value = 1
         onChangeScrollPosition(0)
         launches.value = listOf()
     }
+
     private fun incrementPage() {
         page.value += 1
     }
 
-    fun getFirst()  {
+    fun getFirst() {
         viewResponse.value = ViewResponse.Loading
         resetSearchState()
         viewModelScope.launch {
             launchesRepo.launches(
                 0,
-                "",
-                "desc",
-                pageSize,
+                selectedSorting.value,
+                selectedOrder.value,
+                pageSize, selectedLandingStatus.value,
+                selectedYear.value,
                 object : OnCompleteListener<List<LaunchDto>> {
                     override fun onComplete(t: List<LaunchDto>) {
 
                         if (t.isNotEmpty()) {
                             viewResponse.value = ViewResponse.Fetched
 
-                            launches.value = networkMapper.LaunchDtoMapper.mapToListOfDomain(
-                                (t)
-                            )
+                            launches.value = networkMapper.LaunchDtoMapper.mapToListOfDomain(t)
 
-                        } else viewResponse.value = ViewResponse.Fetched
+                        } else viewResponse.value = ViewResponse.NoData
 
                     }
 
@@ -109,6 +135,27 @@ constructor(
         this.launches.value = current
     }
 
+    fun notifyFilterDialog(b: Boolean) {
+        openDialog.value = b
+    }
+
+
+    fun setFilteredYear(it: Int?) {
+        selectedYear.value = it
+    }
+
+    fun setFilteredOrder(it: String?) {
+        selectedOrder.value = it
+
+    }
+
+    fun setFilterLandingStatus(it: Boolean?) {
+        selectedLandingStatus.value = it
+    }
+
+    fun setFilterSorting(it: String?) {
+        selectedSorting.value = it
+    }
 
     val launches: MutableState<List<Launch>> = mutableStateOf(listOf())
     private var scrollPosition = 0
