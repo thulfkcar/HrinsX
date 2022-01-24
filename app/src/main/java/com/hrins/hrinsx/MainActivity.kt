@@ -31,14 +31,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val companyDescription =
-                viewModel.companyDescription.value
+            viewModel.getFirst()
+            val companyDescription = viewModel.companyDescription.value
             val page = viewModel.page.value
-
             val pageSize = viewModel.pageSize
             val launches = viewModel.launches.value
             val viewResponse = viewModel.viewResponse.value
-
             HrinsXTheme {
 
                 Surface(color = MaterialTheme.colors.background) {

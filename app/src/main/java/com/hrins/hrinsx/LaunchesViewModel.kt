@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hrins.hrinsx.domain.Launch
 import com.hrins.hrinsx.network.NetworkMapper
-import com.hrins.hrinsx.network.api.MultiResponseStructure
 import com.hrins.hrinsx.network.api.OnCompleteListener
 import com.hrins.hrinsx.network.models.LaunchDto
 import com.hrins.hrinsx.repositories.LaunchesRepo
@@ -41,13 +40,13 @@ constructor(
                         "desc",
                         pageSize,
 
-                        object : OnCompleteListener<MultiResponseStructure<LaunchDto>> {
-                            override fun onComplete(t: MultiResponseStructure<LaunchDto>) {
-                                if (t.data != null) {
+                        object : OnCompleteListener<List<LaunchDto>> {
+                            override fun onComplete(t: List<LaunchDto>) {
+                                if (t != null) {
 
                                     appendNewItems(
                                         networkMapper.LaunchDtoMapper.mapToListOfDomain(
-                                            (t.validate() as MultiResponseStructure<LaunchDto>).data!!
+                                            (t)
                                         )
                                     )
                                     viewResponse.value = ViewResponse.Fetched
@@ -70,7 +69,30 @@ constructor(
     }
 
     fun getFirst() {
+        viewResponse.value = ViewResponse.Loading
 
+        viewModelScope.launch {
+            launchesRepo.launches(
+                0,
+                "",
+                "desc",
+                pageSize,
+                object : OnCompleteListener<List<LaunchDto>> {
+                    override fun onComplete(t: List<LaunchDto>) {
+                        if (t != null) {
+                            ViewResponse.Fetched
+                            launches.value = networkMapper.LaunchDtoMapper.mapToListOfDomain(
+                                (t)
+                            )
+
+                        } else ViewResponse.NoData
+                    }
+
+                    override fun onError(error: String?) {
+                        viewResponse.value = ViewResponse.APIError
+                    }
+                })
+        }
     }
 
 
@@ -92,7 +114,6 @@ constructor(
     init {
 
     }
-
 
 
 }
