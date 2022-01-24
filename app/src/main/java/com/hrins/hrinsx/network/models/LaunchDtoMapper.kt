@@ -1,20 +1,26 @@
 package com.hrins.hrinsx.network.models
 
+import com.hrins.hrinsx.App
+import com.hrins.hrinsx.Utils
 import com.hrins.hrinsx.domain.DomainMapper
 import com.hrins.hrinsx.domain.Launch
 import com.hrins.hrinsx.domain.Rocket
 
 class LaunchDtoMapper : DomainMapper<LaunchDto, Launch> {
     override fun mapToDomainModel(model: LaunchDto): Launch {
+        val utils=Utils(App.instance)
 
+        val days=utils.getDaysOf(model.launchDateUnix)
+        val timeAgo = utils.getTimeAgo(model.launchDateUnix)
         return Launch(
             model.id!!,
             model.missionName!!,
-            model.launchDateUtc!!,
-            Rocket(model.rocketDto?.rocketId!!, model.rocketDto?.rocketName!!,
+            timeAgo,
+            Rocket(
+                model.rocketDto?.rocketId!!, model.rocketDto?.rocketName!!,
                 model.rocketDto!!.rocketType!!
             ),
-            model.launchDateUtc+"",
+            days,
             model.linksDto.missionPatch,
             model.launchSuccess
         )

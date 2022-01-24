@@ -10,7 +10,7 @@ data class LaunchDto (
   @SerializedName("mission_id"              ) var missionId             : ArrayList<String>     = arrayListOf(),
   @SerializedName("upcoming"                ) var upcoming              : Boolean?              = null,
   @SerializedName("launch_year"             ) var launchYear            : String?               = null,
-  @SerializedName("launch_date_unix"        ) var launchDateUnix        : Int?                  = null,
+  @SerializedName("launch_date_unix"        ) var launchDateUnix        : Long?                  = null,
   @SerializedName("launch_date_utc"         ) var launchDateUtc         : String?               = null,
   @SerializedName("launch_date_local"       ) var launchDateLocal       : String?               = null,
   @SerializedName("is_tentative"            ) var isTentative           : Boolean?              = null,

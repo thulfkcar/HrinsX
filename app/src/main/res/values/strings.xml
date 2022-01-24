@@ -10,4 +10,14 @@
     <string name="networkError">network error</string>
     <string name="loading">Loadnig</string>
     <string name="noConnection">No Connection With Server</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <string name="Yesterday_at">Yasterday at</string>
+    <string name="_1_hr">one hour</string>
+    <string name="just_now">Just Now</string>
+    <string name="_1_min">one minute</string>
+    <string name="mins">Minutes</string>
+    <string name="hours">Hours</string>
+    <string name="daysAgo">\tDays \tSince\tNow\t</string>
+    <string name="daysLeft">\tDays \tFrom\tNow\t</string>
 </resources>

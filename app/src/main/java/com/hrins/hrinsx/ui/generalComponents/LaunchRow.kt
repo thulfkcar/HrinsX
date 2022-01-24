@@ -86,7 +86,7 @@ fun LaunchRow(launch: Launch, onClick: (Launch) -> Unit) {
                     )
 
                     Text(
-                        text = launch.launchDate,
+                        text = launch.time,
                         fontSize = 16.sp,
                         fontStyle = FontStyle.Normal, fontWeight = FontWeight.Bold,
                         maxLines = 3,
