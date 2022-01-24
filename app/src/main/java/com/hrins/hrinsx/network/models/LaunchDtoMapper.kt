@@ -14,8 +14,9 @@ class LaunchDtoMapper : DomainMapper<LaunchDto, Launch> {
             Rocket(model.rocketDto?.rocketId!!, model.rocketDto?.rocketName!!,
                 model.rocketDto!!.rocketType!!
             ),
-            model.launchDateUtc+model.launchYear,
-            model.linksDto.missionPatch
+            model.launchDateUtc+"",
+            model.linksDto.missionPatch,
+            model.launchSuccess
         )
     }
 

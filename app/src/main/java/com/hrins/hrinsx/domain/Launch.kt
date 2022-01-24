@@ -6,5 +6,6 @@ data class Launch(
     val time: String,
     val rocket: Rocket,
     val launchDate: String,
-    val image:String?="https://images2.imgbox.com/40/e3/GypSkayF_o.png"
+    val image: String? = "https://images2.imgbox.com/40/e3/GypSkayF_o.png",
+    val launchIsSuccessful: Boolean
 )

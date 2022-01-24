@@ -21,7 +21,7 @@ data class LaunchDto (
   @SerializedName("ships"                   ) var ships                 : ArrayList<String>     = arrayListOf(),
   @SerializedName("telemetry"               ) var telemetryDto             : TelemetryDto?            = TelemetryDto(),
   @SerializedName("launch_site"             ) var launchSiteDto            : LaunchSiteDto?           = LaunchSiteDto(),
-  @SerializedName("launch_success"          ) var launchSuccess         : Boolean?              = null,
+  @SerializedName("launch_success"          ) var launchSuccess         : Boolean              = false,
   @SerializedName("launch_failure_details"  ) var launchFailureDetailsDto  : LaunchFailureDetailsDto? = LaunchFailureDetailsDto(),
   @SerializedName("links"                   ) var linksDto                 : LinksDto                = LinksDto(),
   @SerializedName("details"                 ) var details               : String?               = null,

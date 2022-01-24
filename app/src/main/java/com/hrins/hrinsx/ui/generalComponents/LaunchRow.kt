@@ -8,31 +8,37 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.hrins.hrinsx.R
 import com.hrins.hrinsx.domain.Launch
 import com.hrins.hrinsx.domain.Rocket
 
 @Composable
 fun LaunchRow(launch: Launch, onClick: (Launch) -> Unit) {
-    Column(Modifier.fillMaxWidth().clickable(onClick = { onClick(launch) })) {
-        Row(
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onClick(launch) })
+    ) {
+        ConstraintLayout(
             Modifier
-                .padding(8.dp)
+                .padding(4.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
 
         ) {
-
-            var url="https://images2.imgbox.com/40/e3/GypSkayF_o.png"
-            if (launch.image!=null)
-                url=launch.image
+            val (missionImage, content, status) = createRefs()
+            var url = "https://images2.imgbox.com/40/e3/GypSkayF_o.png"
+            if (launch.image != null)
+                url = launch.image
             val image = loadPicture(
                 url = url,
                 defaultImage = R.drawable.ic_baseline_airplanemode_active_24
@@ -40,23 +46,34 @@ fun LaunchRow(launch: Launch, onClick: (Launch) -> Unit) {
 
             Image(
                 bitmap = image,
-                contentDescription = "article ain image",
+                contentDescription = "image",
                 Modifier
                     .size(45.dp)
-                    .padding(end = 8.dp), contentScale = ContentScale.Crop
+                    .padding(end = 4.dp).fillMaxWidth(0.1f)
+                    .constrainAs(missionImage) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
             )
 
 
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(3.dp)
+
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+                modifier = Modifier.fillMaxWidth(0.8f).constrainAs(content) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(missionImage.end)
+                }
             ) {
 
                 Row {
                     Text(
                         text = stringResource(R.string.mission),
-                        Modifier.padding(2.dp),
+                        modifier = Modifier.padding(2.dp),
                         fontSize = 16.sp
+
                     )
                     Text(text = launch.mission, Modifier.padding(2.dp), fontSize = 16.sp)
                 }
@@ -108,8 +125,25 @@ fun LaunchRow(launch: Launch, onClick: (Launch) -> Unit) {
 
             }
 
+
+            var statusResource = R.drawable.unsuccessful
+            if (launch.launchIsSuccessful)
+                statusResource = R.drawable.successful
+
+            Image(
+                painterResource(id = statusResource),
+                contentDescription = "image",
+                Modifier.fillMaxWidth(0.1f)
+                    .size(45.dp)
+                    .padding(end = 6.dp).constrainAs(status){
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    }
+            )
+
+
         }
-        Divider(color = Color.Black,thickness = 2.dp)
+        Divider(color = Color.Black, thickness = 2.dp)
     }
 
 }
@@ -126,7 +160,8 @@ fun Preview() {
             "2020-01,12",
             Rocket("345345-5345-534", "FireBall", "Falcon"),
             "from now 3 days",
-            "https://images2.imgbox.com/40/e3/GypSkayF_o.png"
+            "https://images2.imgbox.com/40/e3/GypSkayF_o.png",
+            true
         ),
         onClick = {}
     )
