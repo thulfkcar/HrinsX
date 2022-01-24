@@ -157,6 +157,15 @@ constructor(
         selectedSorting.value = it
     }
 
+    fun isThereFilterValue(): Boolean {
+        if (selectedLandingStatus.value!= null) return true
+        if (selectedOrder.value!=null) return true
+        if (selectedYear.value!=null) return true
+        if (selectedSorting.value!= null) return true
+
+            return false
+    }
+
     val launches: MutableState<List<Launch>> = mutableStateOf(listOf())
     private var scrollPosition = 0
 

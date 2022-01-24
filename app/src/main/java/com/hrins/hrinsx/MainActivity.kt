@@ -11,7 +11,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -141,6 +145,16 @@ class MainActivity : ComponentActivity() {
         val companyViewResponse = companyViewModel.viewResponse.value
         val showCommentDialog = viewModel.openDialog.value
 
+        val progressCompanyState = remember {
+            mutableStateOf(false)
+        }
+        when (companyViewResponse) {
+            ViewResponse.Loading -> progressCompanyState.value = true
+            ViewResponse.Fetched -> progressCompanyState.value = false
+            ViewResponse.APIError -> progressCompanyState.value = false
+            else -> {
+            }
+        }
 
         Surface(
             color = MaterialTheme.colors.background,
@@ -179,6 +193,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Column(Modifier.fillMaxWidth()) {
+
                     Surface(color = Color.DarkGray, modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = getString(R.string.company),
@@ -188,11 +203,18 @@ class MainActivity : ComponentActivity() {
                         )
 
                     }
-                    Text(
-                        text = companyDescription,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(6.dp)
-                    )
+                    if (progressCompanyState.value)
+                        CircularProgressIndicator(
+                            Modifier
+                                .align(alignment = Alignment.CenterHorizontally)
+                                .padding(8.dp)
+                        )
+                    else
+                        Text(
+                            text = companyDescription,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(6.dp)
+                        )
 
 
                     Surface(color = Color.DarkGray, modifier = Modifier.fillMaxWidth()) {
@@ -207,31 +229,26 @@ class MainActivity : ComponentActivity() {
                     }
                     ViewStatusValidation(viewResponse,
                         resources.getString(R.string.LAUNCHES),
-                        Box(modifier = Modifier.fillMaxSize()) {
+                        LazyColumn {
+                            itemsIndexed(items = launches) { index, item: Launch ->
+                                viewModel.onChangeScrollPosition(index)
+                                if ((index + 1) >= (page * pageSize) && viewResponse != ViewResponse.Loading) {
+                                    viewModel.nextPage()
+                                }
 
-
-                            LazyColumn {
-                                itemsIndexed(items = launches) { index, item: Launch ->
-                                    viewModel.onChangeScrollPosition(index)
-                                    if ((index + 1) >= (page * pageSize) && viewResponse != ViewResponse.Loading) {
-                                        viewModel.nextPage()
+                                LaunchRow(launch = item, onClick = {
+                                    scope.launch {
+                                        viewModel.setSelectedLaunch(item)
+                                        modalBottomSheetState.show()
                                     }
-
-                                    LaunchRow(launch = item, onClick = {
-                                        scope.launch {
-                                            viewModel.setSelectedLaunch(item)
-                                            modalBottomSheetState.show()
-                                        }
-                                    })
-                                }
-                                item {
-                                    val isLoading: Boolean =
-                                        viewResponse == ViewResponse.NextPageLoading
-                                    CircularProgressBar(isDisplayed = isLoading)
-
-                                }
+                                })
                             }
+                            item {
+                                val isLoading: Boolean =
+                                    viewResponse == ViewResponse.NextPageLoading
+                                CircularProgressBar(isDisplayed = isLoading)
 
+                            }
                         },
                         onReload = {
                             viewModel.getFirst()
@@ -270,17 +287,24 @@ class MainActivity : ComponentActivity() {
                             mutableStateOf(false)
                         }
                         Spinner(
-                            "Launch Year", viewModel.selectedYear.value,"All Years", viewModel.years,
+                            "Launch Year",
+                            viewModel.selectedYear.value,
+                            "All Years",
+                            viewModel.years,
                             {
-                                    viewModel.setFilteredYear(it)
-                            }, yearState
+                                viewModel.setFilteredYear(it)
+                            },
+                            yearState
                         )
                         Spinner(
                             "Successful Landing?",
-                            viewModel.selectedLandingStatus.value.toString(),"All", viewModel.successfulLandings,
+                            viewModel.selectedLandingStatus.value.toString(),
+                            "All",
+                            viewModel.successfulLandings,
                             {
-                                    viewModel.setFilterLandingStatus(it as Boolean?)
-                            }, landingState
+                                viewModel.setFilterLandingStatus(it as Boolean?)
+                            },
+                            landingState
                         )
                         Spinner(
                             "Sorting",
@@ -288,14 +312,14 @@ class MainActivity : ComponentActivity() {
                             "default Sorting",
                             viewModel.sorts,
                             {
-                                    viewModel.setFilterSorting(it)
+                                viewModel.setFilterSorting(it)
                             },
                             sortingState
                         )
                         Spinner(
-                            "Order By",viewModel.selectedOrder.value ,"default", viewModel.orders,
+                            "Order By", viewModel.selectedOrder.value, "default", viewModel.orders,
                             {
-                                    viewModel.setFilteredOrder(it)
+                                viewModel.setFilteredOrder(it)
                             }, orderSate
                         )
 
@@ -312,7 +336,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.fillMaxWidth(),
                                     onClick = {
                                         viewModel.setFilterToBeApplied(false)
-                                        viewModel.notifyFilterDialog (false)
+                                        viewModel.notifyFilterDialog(false)
                                         viewModel.getFirst()
                                     }
                                 ) {
@@ -326,9 +350,12 @@ class MainActivity : ComponentActivity() {
                             Button(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    viewModel.setFilterToBeApplied(true)
-                                    viewModel.notifyFilterDialog (false)
-                                    viewModel.getFirst()
+
+                                    viewModel.notifyFilterDialog(false)
+                                    if (viewModel.isThereFilterValue()) {
+                                        viewModel.setFilterToBeApplied(true)
+                                        viewModel.getFirst()
+                                    }
                                 }
                             ) {
                                 Text("apply Filter")
@@ -339,8 +366,6 @@ class MainActivity : ComponentActivity() {
                 })
         }
     }
-
-
 
 
 }
