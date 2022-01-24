@@ -42,7 +42,7 @@ constructor(
 
                         object : OnCompleteListener<List<LaunchDto>> {
                             override fun onComplete(t: List<LaunchDto>) {
-                                if (t != null) {
+                                if (t.isNotEmpty()) {
 
                                     appendNewItems(
                                         networkMapper.LaunchDtoMapper.mapToListOfDomain(
@@ -51,7 +51,7 @@ constructor(
                                     )
                                     viewResponse.value = ViewResponse.Fetched
                                 }
-                                ViewResponse.NoData
+                                viewResponse.value=ViewResponse.NoData
                             }
 
                             override fun onError(error: String?) {
@@ -63,14 +63,18 @@ constructor(
             }
         }
     }
-
+    private fun resetSearchState() {
+        page.value = 1
+        onChangeScrollPosition(0)
+        launches.value = listOf()
+    }
     private fun incrementPage() {
         page.value += 1
     }
 
-    fun getFirst() {
+    fun getFirst()  {
         viewResponse.value = ViewResponse.Loading
-
+        resetSearchState()
         viewModelScope.launch {
             launchesRepo.launches(
                 0,
@@ -79,13 +83,16 @@ constructor(
                 pageSize,
                 object : OnCompleteListener<List<LaunchDto>> {
                     override fun onComplete(t: List<LaunchDto>) {
-                        if (t != null) {
-                            ViewResponse.Fetched
+
+                        if (t.isNotEmpty()) {
+                            viewResponse.value = ViewResponse.Fetched
+
                             launches.value = networkMapper.LaunchDtoMapper.mapToListOfDomain(
                                 (t)
                             )
 
-                        } else ViewResponse.NoData
+                        } else viewResponse.value = ViewResponse.Fetched
+
                     }
 
                     override fun onError(error: String?) {
@@ -112,7 +119,7 @@ constructor(
     val companyDescription: MutableState<String> = mutableStateOf("")
 
     init {
-
+        getFirst()
     }
 
 

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class LinksDto (
 
-  @SerializedName("mission_patch"       ) var missionPatch      : String?           = null,
+  @SerializedName("mission_patch"       ) var missionPatch      : String           = "https://images2.imgbox.com/40/e3/GypSkayF_o.png",
   @SerializedName("mission_patch_small" ) var missionPatchSmall : String?           = null,
   @SerializedName("reddit_campaign"     ) var redditCampaign    : String?           = null,
   @SerializedName("reddit_launch"       ) var redditLaunch      : String?           = null,

@@ -3,6 +3,7 @@
     package="com.hrins.hrinsx">
 <uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:hardwareAccelerated="false"
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

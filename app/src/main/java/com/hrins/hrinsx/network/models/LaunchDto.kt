@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class LaunchDto (
-  @SerializedName("_id"                     ) var Id                    : String?           = null,
+  @SerializedName("_id"                     ) var id                    : String?           = null,
   @SerializedName("flight_number"           ) var flightNumber          : Int?                  = null,
   @SerializedName("mission_name"            ) var missionName           : String?               = null,
   @SerializedName("mission_id"              ) var missionId             : ArrayList<String>     = arrayListOf(),
@@ -23,7 +23,7 @@ data class LaunchDto (
   @SerializedName("launch_site"             ) var launchSiteDto            : LaunchSiteDto?           = LaunchSiteDto(),
   @SerializedName("launch_success"          ) var launchSuccess         : Boolean?              = null,
   @SerializedName("launch_failure_details"  ) var launchFailureDetailsDto  : LaunchFailureDetailsDto? = LaunchFailureDetailsDto(),
-  @SerializedName("links"                   ) var linksDto                 : LinksDto?                = LinksDto(),
+  @SerializedName("links"                   ) var linksDto                 : LinksDto                = LinksDto(),
   @SerializedName("details"                 ) var details               : String?               = null,
   @SerializedName("static_fire_date_utc"    ) var staticFireDateUtc     : String?               = null,
   @SerializedName("static_fire_date_unix"   ) var staticFireDateUnix    : Int?                  = null,

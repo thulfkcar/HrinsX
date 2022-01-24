@@ -12,8 +12,8 @@ data class PayloadsDto (
   @SerializedName("nationality"      ) var nationality    : String?           = null,
   @SerializedName("manufacturer"     ) var manufacturer   : String?           = null,
   @SerializedName("payload_type"     ) var payloadType    : String?           = null,
-  @SerializedName("payload_mass_kg"  ) var payloadMassKg  : Int?              = null,
-  @SerializedName("payload_mass_lbs" ) var payloadMassLbs : Int?              = null,
+  @SerializedName("payload_mass_kg"  ) var payloadMassKg  : Double?              = null,
+  @SerializedName("payload_mass_lbs" ) var payloadMassLbs : Double?              = null,
   @SerializedName("orbit"            ) var orbit          : String?           = null,
   @SerializedName("orbit_params"     ) var orbitParamsDto    : OrbitParamsDto?      = OrbitParamsDto()
 

@@ -8,12 +8,14 @@ class LaunchDtoMapper : DomainMapper<LaunchDto, Launch> {
     override fun mapToDomainModel(model: LaunchDto): Launch {
 
         return Launch(
-            1,
-            "alpha 1",
-            "2020-01,12",
-            Rocket("345345-5345-534", "FireBall", "Falcon"),
-            "from now 3 days",
-            "https://images2.imgbox.com/40/e3/GypSkayF_o.png"
+            model.id!!,
+            model.missionName!!,
+            model.launchDateUtc!!,
+            Rocket(model.rocketDto?.rocketId!!, model.rocketDto?.rocketName!!,
+                model.rocketDto!!.rocketType!!
+            ),
+            model.launchDateUtc+model.launchYear,
+            model.linksDto.missionPatch
         )
     }
 

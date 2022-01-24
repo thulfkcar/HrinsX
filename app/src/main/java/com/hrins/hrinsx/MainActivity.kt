@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +32,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            viewModel.getFirst()
             val companyDescription = viewModel.companyDescription.value
             val page = viewModel.page.value
             val pageSize = viewModel.pageSize
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
             val viewResponse = viewModel.viewResponse.value
             HrinsXTheme {
 
-                Surface(color = MaterialTheme.colors.background) {
+                Surface(color = MaterialTheme.colors.background,modifier = Modifier.fillMaxHeight()) {
                     Scaffold(topBar = {
                         TopAppBar(
                             backgroundColor = Color.Transparent, elevation = 0.dp,
@@ -90,7 +90,6 @@ class MainActivity : ComponentActivity() {
                             }
                             ViewStatusValidation(viewResponse,
                                 resources.getString(R.string.LAUNCHES),
-
                                 Box(modifier = Modifier.fillMaxSize()) {
 
 
