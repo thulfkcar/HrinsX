@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,17 +28,22 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<LaunchesViewModel>()
+    private val companyViewModel by viewModels<CompanyViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val companyDescription = viewModel.companyDescription.value
             val page = viewModel.page.value
             val pageSize = viewModel.pageSize
             val launches = viewModel.launches.value
             val viewResponse = viewModel.viewResponse.value
+            val companyDescription = companyViewModel.companyDescription.value
+            val companyViewResponse = companyViewModel.viewResponse.value
             HrinsXTheme {
 
-                Surface(color = MaterialTheme.colors.background,modifier = Modifier.fillMaxHeight()) {
+                Surface(
+                    color = MaterialTheme.colors.background,
+                    modifier = Modifier.fillMaxHeight()
+                ) {
                     Scaffold(topBar = {
                         TopAppBar(
                             backgroundColor = Color.Transparent, elevation = 0.dp,

@@ -18,6 +18,11 @@
     <string name="_1_min">one minute</string>
     <string name="mins">Minutes</string>
     <string name="hours">Hours</string>
-    <string name="daysAgo">\tDays \tSince\tNow\t</string>
-    <string name="daysLeft">\tDays \tFrom\tNow\t</string>
+    <string name="wasFounded">\t was\t founded\t by</string>
+    <string name="foundedIn">\t in \n</string>
+    <string name="it_has">\t it has now \t</string>
+    <string name="employees">\t employees, \n</string>
+    <string name="site">\t launch site,\t and t\is \t valid\t at\t USD\t </string>
+    <string name="daysAgo">\tDays\t Since\t Now</string>
+    <string name="daysLeft">\tDays\t From\t Now</string>
 </resources>
